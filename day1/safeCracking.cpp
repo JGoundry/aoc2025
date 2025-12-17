@@ -7,7 +7,7 @@
 #include <ranges>
 #include <string>
 
-constexpr bool debug = true;
+constexpr bool debug = false;
 
 #define DEBUG_PRINT(msg)                                                       \
   if constexpr (debug)                                                         \
