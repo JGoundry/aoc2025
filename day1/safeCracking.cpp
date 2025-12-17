@@ -1,6 +1,7 @@
 #include "safeCracking.hpp"
 
 #include <cassert>
+#include <expected>
 #include <filesystem>
 #include <iostream>
 #include <ranges>
@@ -112,10 +113,9 @@ std::ifstream validateAndOpenFile(const std::string_view &filename) {
   return file;
 }
 
-std::vector<std::string> readLines(std::ifstream &file) {
+std::expected<std::vector<std::string>, std::string> readLines(std::ifstream &file) {
   if (!file.is_open()) {
-    // throw?
-    return std::vector<std::string>{};
+    return std::unexpected("could not read from file stream");
   }
 
   std::string line;

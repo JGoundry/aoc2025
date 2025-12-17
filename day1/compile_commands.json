@@ -87,12 +87,12 @@
       "-x",
       "c++",
       "-o",
-      "/tmp/main-e143b3.o",
+      "/tmp/main-ecac9b.o",
       "main.cpp"
     ],
     "directory": "/home/joshg/Projects/aoc/day1",
     "file": "/home/joshg/Projects/aoc/day1/main.cpp",
-    "output": "/tmp/main-e143b3.o"
+    "output": "/tmp/main-ecac9b.o"
   },
   {
     "arguments": [
@@ -160,11 +160,11 @@
       "-x",
       "c++",
       "-o",
-      "/tmp/safeCracking-40e5ff.o",
+      "/tmp/safeCracking-5af345.o",
       "safeCracking.cpp"
     ],
     "directory": "/home/joshg/Projects/aoc/day1",
     "file": "/home/joshg/Projects/aoc/day1/safeCracking.cpp",
-    "output": "/tmp/safeCracking-40e5ff.o"
+    "output": "/tmp/safeCracking-5af345.o"
   }
 ]
