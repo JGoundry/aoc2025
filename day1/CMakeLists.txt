@@ -19,15 +19,18 @@ set(CMAKE_CXX_EXTENSIONS        FALSE)
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
 # Safe cracking lib (logic)
-add_library(safe_cracking safeCracking.cpp)
+add_library(safe_cracking src/safeCracking.cpp)
 
 # Create main executable and link logic lib
-add_executable(${PROJECT_NAME} main.cpp)
+add_executable(${PROJECT_NAME} src/main.cpp)
 target_link_libraries(${PROJECT_NAME} PRIVATE safe_cracking)
 
 # Create test executable link logic lib and gtest
-add_executable(tests test_safeCracking.cpp)
+add_executable(tests src/test_safeCracking.cpp)
 target_link_libraries(tests PRIVATE safe_cracking GTest::gtest_main)
+
+# Include headers
+target_include_directories(safe_cracking PUBLIC src)
 
 # Enable CTest
 enable_testing()

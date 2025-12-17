@@ -2,6 +2,9 @@
 
 #include <gtest/gtest.h>
 
+namespace
+{
+
 struct CrackSafeTestData {
     const std::vector<std::string> safeOps;
     const size_t expected;
@@ -22,6 +25,8 @@ const CrackSafeTestData data {
     },
     .expected = 3,
 };
+
+} // anonymous namespace
 
 TEST(CrackSafe, TestData) {
     auto result = crackSafe(data.safeOps);
