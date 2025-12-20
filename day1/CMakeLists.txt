@@ -9,7 +9,7 @@ target_link_libraries(day1 PRIVATE utils day1_logic)
 
 # Create test executable link logic lib and gtest
 add_executable(test_day1 tests/test_crackSafe.cpp)
-target_link_libraries(test_day1 PRIVATE day1_logic GTest::gtest_main)
+target_link_libraries(test_day1 PRIVATE day1_logic GTest::gtest GTest::gtest_main)
 
 # Let ctest discover gtests
 gtest_discover_tests(test_day1)
