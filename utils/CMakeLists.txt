@@ -3,7 +3,7 @@ add_library(utils STATIC src/fileUtils.cpp src/stringUtils.cpp)
 target_include_directories(utils PUBLIC include)
 
 # Test executable
-add_executable(test_utils tests/test_fileUtils.cpp)
+add_executable(test_utils tests/test_fileUtils.cpp tests/test_stringUtils.cpp)
 target_link_libraries(test_utils PRIVATE utils GTest::gtest GTest::gtest_main)
 
 # Let ctest discover gtests

@@ -7,7 +7,7 @@
 namespace utils
 {
 
-std::ifstream validateAndOpenFile(const std::string_view &filename);
+std::ifstream validateAndOpenFile(const std::string_view &path);
 std::expected<std::vector<std::string>, std::string> readLines(std::ifstream &file);
 
 }

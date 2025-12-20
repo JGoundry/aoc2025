@@ -6,8 +6,8 @@
 namespace utils
 {
 
-std::ifstream validateAndOpenFile(const std::string_view &filename) {
-  std::filesystem::path p(filename);
+std::ifstream validateAndOpenFile(const std::string_view &path) {
+  std::filesystem::path p(path);
   std::ifstream file;
 
   if (!std::filesystem::exists(p) || !std::filesystem::is_regular_file(p)) {

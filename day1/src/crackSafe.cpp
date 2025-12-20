@@ -19,7 +19,7 @@ bool debug = std::getenv("AOC_DEBUG");
 
 #define DEBUG_PRINT(msg)                                                       \
   if (debug)                                                                   \
-    std::cout << msg << '\n';
+    std::cout << msg << '\n'
 
 std::expected<int, std::exception> safeOpToInt(const std::string &str) {
   try {
