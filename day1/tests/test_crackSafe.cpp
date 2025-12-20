@@ -2,6 +2,10 @@
 
 #include <gtest/gtest.h>
 
+namespace day1
+{
+namespace testing
+{
 namespace
 {
 
@@ -26,9 +30,12 @@ const CrackSafeTestData data {
     .expected = 6,
 };
 
-} // anonymous namespace
+} // namespace anonymous 
 
 TEST(Day1, CrackSafe) {
     auto result = crackSafe(data.safeOps);
     EXPECT_EQ(data.expected, result);
 }
+
+} // namespace testing 
+} // namespace day1 

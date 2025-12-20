@@ -10,6 +10,11 @@
 #include <iostream>
 #include <string>
 
+namespace day1
+{
+namespace
+{
+
 bool debug = std::getenv("AOC_DEBUG");
 
 #define DEBUG_PRINT(msg)                                                       \
@@ -103,6 +108,8 @@ private:
   size_t zeroCount_;
 };
 
+} // namespace anonymous 
+
 size_t crackSafe(const std::vector<std::string> &safeOperations) {
   SafeDial sd;
 
@@ -116,3 +123,5 @@ size_t crackSafe(const std::vector<std::string> &safeOperations) {
 
   return sd.zeroCount();
 }
+
+} // namespace day1
