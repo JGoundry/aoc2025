@@ -1,6 +1,7 @@
 # Crack safe lib (logic)
 add_library(day1_logic STATIC src/crackSafe.cpp)
-target_include_directories(day1_logic PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
+target_include_directories(day1_logic PUBLIC src)
+target_link_libraries(day1_logic PRIVATE utils)
 
 # Create main executable and link logic lib
 add_executable(day1 src/main.cpp)

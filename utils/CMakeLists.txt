@@ -1,6 +1,6 @@
 # Utils lib
-add_library(utils STATIC src/fileUtils.cpp)
-target_include_directories(utils PUBLIC ${CMAKE_SOURCE_DIR})
+add_library(utils STATIC src/fileUtils.cpp src/stringUtils.cpp)
+target_include_directories(utils PUBLIC include)
 
 # # Test executable
 # add_executable(test_utils src/test_fileUtils.cpp)

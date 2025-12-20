@@ -1,8 +1,9 @@
 #include "crackSafe.hpp"
 
+#include "utils/stringUtils.hpp"
+
 #include <cassert>
 #include <iostream>
-#include <ranges>
 #include <string>
 #include <iomanip>
 
@@ -12,27 +13,13 @@ bool debug = std::getenv("AOC_DEBUG");
   if (debug)                                                         \
     std::cout << msg << '\n';
 
-std::string trimWhitespace(const std::string_view &sv) {
-  const auto isWhitespace = [](const unsigned char c) -> bool {
-    return std::isspace(c);
-  };
-
-  auto withoutLeadingWhitespace = sv | std::views::drop_while(isWhitespace);
-  auto reversed = withoutLeadingWhitespace | std::views::reverse;
-  auto reversedWithoutLeadingWhitespace =
-      reversed | std::views::drop_while(isWhitespace);
-  auto trimmed = reversedWithoutLeadingWhitespace | std::views::reverse;
-
-  return std::string(trimmed.begin(), trimmed.end());
-}
-
-int opToInt(const std::string &str) {
+int safeOpToInt(const std::string &str) {
   try {
     auto num = std::string(str.begin() + 1, str.end());
     return std::stoi(num);
 
   } catch (const std::exception &e) {
-    std::cerr << "Caugh exception: " << e.what() << '\n';
+    std::cerr << "Caught exception: " << e.what() << '\n';
     return 0;
   }
 }
@@ -51,8 +38,7 @@ public:
 
     switch (opTrimmed[0]) {
     case 'L': {
-      const int input = opToInt(opTrimmed);
-
+      const int input = safeOpToInt(opTrimmed);
       const int div = (num_ - input) / -100;
       const int mod = (num_ - input) % -100;
 
@@ -68,11 +54,10 @@ public:
         num_ = 100 + mod;
       }
 
-      DEBUG_PRINT("    " << std::setw(2) << num_ << ", zeroCount = " << zeroCount_ );
       break;
     }
     case 'R': {
-      const int input = opToInt(opTrimmed);
+      const int input = safeOpToInt(opTrimmed);
       const int div = (num_ + input) / 100;
       const int mod = (num_ + input) % 100;
 
@@ -81,7 +66,6 @@ public:
 
       num_ = 0 + mod;
 
-      DEBUG_PRINT("    " << std::setw(2) << num_ << ", zeroCount = " << zeroCount_ );
       break;
     }
     default: {
@@ -89,6 +73,8 @@ public:
       break;
     }
     }
+
+    DEBUG_PRINT("    " << std::setw(2) << num_ << ", zeroCount = " << zeroCount_ );
 
     // postcondition: 0 <= num < 100
     assert(0 <= num_ && num_ < 100);
@@ -115,17 +101,13 @@ private:
 size_t crackSafe(const std::vector<std::string> &safeOperations) {
   SafeDial sd;
 
-  if (debug) {
-    sd.print(std::cout);
-  }
+  DEBUG_PRINT(sd);
 
   for (const std::string &op : safeOperations) {
     sd += op;
   }
 
-  if (debug) {
-    sd.print(std::cout);
-  }
+  DEBUG_PRINT(sd);
 
   return sd.zeroCount();
 }
