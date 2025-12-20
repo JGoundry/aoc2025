@@ -1,16 +1,15 @@
-#include "safeCracking.hpp"
+#include "crackSafe.hpp"
 
 #include <cassert>
-#include <expected>
-#include <filesystem>
 #include <iostream>
 #include <ranges>
 #include <string>
+#include <iomanip>
 
-constexpr bool debug = false;
+bool debug = std::getenv("AOC_DEBUG");
 
 #define DEBUG_PRINT(msg)                                                       \
-  if constexpr (debug)                                                         \
+  if (debug)                                                         \
     std::cout << msg << '\n';
 
 std::string trimWhitespace(const std::string_view &sv) {
@@ -69,7 +68,7 @@ public:
         num_ = 100 + mod;
       }
 
-      DEBUG_PRINT("    " << num_ << ", zeroCount = " << zeroCount_ );
+      DEBUG_PRINT("    " << std::setw(2) << num_ << ", zeroCount = " << zeroCount_ );
       break;
     }
     case 'R': {
@@ -82,7 +81,7 @@ public:
 
       num_ = 0 + mod;
 
-      DEBUG_PRINT("    " << num_ << ", zeroCount = " << zeroCount_ );
+      DEBUG_PRINT("    " << std::setw(2) << num_ << ", zeroCount = " << zeroCount_ );
       break;
     }
     default: {
@@ -113,42 +112,18 @@ private:
   size_t zeroCount_;
 };
 
-std::ifstream validateAndOpenFile(const std::string_view &filename) {
-  std::filesystem::path p(filename);
-  std::ifstream file;
-
-  if (!std::filesystem::exists(p) || !std::filesystem::is_regular_file(p)) {
-    return file;
-  }
-
-  file.open(p, std::ios_base::openmode::_S_in);
-
-  return file;
-}
-
-std::expected<std::vector<std::string>, std::string>
-readLines(std::ifstream &file) {
-  if (!file.is_open()) {
-    return std::unexpected("could not read from file stream");
-  }
-
-  std::string line;
-  std::vector<std::string> lines;
-  while (std::getline(file, line)) {
-    lines.push_back(line);
-  }
-
-  return lines;
-}
-
 size_t crackSafe(const std::vector<std::string> &safeOperations) {
   SafeDial sd;
+
+  if (debug) {
+    sd.print(std::cout);
+  }
 
   for (const std::string &op : safeOperations) {
     sd += op;
   }
 
-  if constexpr (debug) {
+  if (debug) {
     sd.print(std::cout);
   }
 

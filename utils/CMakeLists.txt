@@ -1,0 +1,10 @@
+# Utils lib
+add_library(utils STATIC src/fileUtils.cpp)
+target_include_directories(utils PUBLIC ${CMAKE_SOURCE_DIR})
+
+# # Test executable
+# add_executable(test_utils src/test_fileUtils.cpp)
+# target_link_libraries(test_utils PRIVATE utils GTest::gtest_main)
+
+# Let ctest discover gtests
+# gtest_discover_tests(test_utils)

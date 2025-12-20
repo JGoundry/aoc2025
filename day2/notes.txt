@@ -1,0 +1,7 @@
+# Parts
+- Input parser for ranges
+- Range -> number generator
+- Number -> validator
+
+# Notes
+- Keep track of invalid numbers as we go

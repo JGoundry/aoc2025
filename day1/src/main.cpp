@@ -2,7 +2,9 @@
 #include <iostream>
 #include <print>
 
-#include "safeCracking.hpp"
+#include "utils/src/fileUtils.hpp"
+
+#include "crackSafe.hpp"
 
 int main(int argc, char *argv[]) {
   if (argc != 2) {
@@ -23,7 +25,7 @@ int main(int argc, char *argv[]) {
 
   const size_t code = crackSafe(safeOps.value());
 
-  std::println("Code: {}", code);
+  std::println("Safe code: {}", code);
 
   // don't return safe code as exit values only go up to 255
   return 0;
