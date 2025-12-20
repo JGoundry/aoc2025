@@ -3,6 +3,9 @@
 #include <expected>
 #include <filesystem>
 
+namespace utils
+{
+
 std::ifstream validateAndOpenFile(const std::string_view &filename) {
   std::filesystem::path p(filename);
   std::ifstream file;
@@ -31,3 +34,4 @@ readLines(std::ifstream &file) {
   return lines;
 }
 
+}

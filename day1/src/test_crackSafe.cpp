@@ -28,7 +28,7 @@ const CrackSafeTestData data {
 
 } // anonymous namespace
 
-TEST(CrackSafe, TestData) {
+TEST(Day1, CrackSafe) {
     auto result = crackSafe(data.safeOps);
     EXPECT_EQ(data.expected, result);
 }

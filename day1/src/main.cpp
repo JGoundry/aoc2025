@@ -1,10 +1,10 @@
-#include <fstream>
-#include <iostream>
-#include <print>
+#include "crackSafe.hpp"
 
 #include "utils/fileUtils.hpp"
 
-#include "crackSafe.hpp"
+#include <fstream>
+#include <iostream>
+#include <print>
 
 int main(int argc, char *argv[]) {
   if (argc != 2) {
@@ -14,10 +14,10 @@ int main(int argc, char *argv[]) {
 
   // Validate filepath and open file
   const std::string_view filename = argv[1];
-  std::ifstream file = validateAndOpenFile(filename);
+  std::ifstream file = utils::validateAndOpenFile(filename);
   
   // Read lines from file
-  const std::expected<std::vector<std::string>, std::string> safeOps = readLines(file);
+  const std::expected<std::vector<std::string>, std::string> safeOps = utils::readLines(file);
   if (!safeOps) {
       std::println(std::cerr, "{}", safeOps.error());
       return -1;

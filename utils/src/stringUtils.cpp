@@ -2,6 +2,9 @@
 
 #include <ranges>
 
+namespace utils
+{
+
 std::string trimWhitespace(const std::string_view &sv) {
   const auto isWhitespace = [](const unsigned char c) -> bool {
     return std::isspace(c);
@@ -14,4 +17,6 @@ std::string trimWhitespace(const std::string_view &sv) {
   auto trimmed = reversedWithoutLeadingWhitespace | std::views::reverse;
 
   return std::string(trimmed.begin(), trimmed.end());
+}
+
 }
