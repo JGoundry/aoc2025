@@ -23,7 +23,7 @@ const CrackSafeTestData data {
         "R14",
         "L82",
     },
-    .expected = 3,
+    .expected = 6,
 };
 
 } // anonymous namespace

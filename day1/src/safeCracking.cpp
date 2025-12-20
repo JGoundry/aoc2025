@@ -7,7 +7,7 @@
 #include <ranges>
 #include <string>
 
-constexpr bool debug = true;
+constexpr bool debug = false;
 
 #define DEBUG_PRINT(msg)                                                       \
   if constexpr (debug)                                                         \
@@ -42,7 +42,7 @@ class SafeDial {
 public:
   SafeDial() : num_(50), zeroCount_(0) {}
 
-  SafeDial &operator+=(const std::string_view& op) {
+  SafeDial &operator+=(const std::string_view &op) {
     // precondition: 0 <= num < 100
     assert(0 <= num_ && num_ < 100);
 
@@ -52,16 +52,37 @@ public:
 
     switch (opTrimmed[0]) {
     case 'L': {
-      const auto i = opToInt(opTrimmed);
-      const auto newNum = (num_ - i) % -100;
-      num_ = (newNum < 0 ? 100 + newNum : newNum) % 100;
-      DEBUG_PRINT("    " << num_);
+      const int input = opToInt(opTrimmed);
+
+      const int div = (num_ - input) / -100;
+      const int mod = (num_ - input) % -100;
+
+      // count how many times we see 0
+      if (mod <= 0) {
+        // only add another 0 if we werent already on 0 so we don't count it twice
+        zeroCount_ += div + (num_ != 0); 
+      }
+
+      if (mod >= 0) { // positive remainder
+        num_ = mod;
+      } else { // negative remainder
+        num_ = 100 + mod;
+      }
+
+      DEBUG_PRINT("    " << num_ << ", zeroCount = " << zeroCount_ );
       break;
     }
     case 'R': {
-      const auto i = opToInt(opTrimmed);
-      num_ = (num_ + i) % 100;
-      DEBUG_PRINT("    " << num_);
+      const int input = opToInt(opTrimmed);
+      const int div = (num_ + input) / 100;
+      const int mod = (num_ + input) % 100;
+
+      // count how many times we see 0
+      zeroCount_ += div;
+
+      num_ = 0 + mod;
+
+      DEBUG_PRINT("    " << num_ << ", zeroCount = " << zeroCount_ );
       break;
     }
     default: {
@@ -70,23 +91,15 @@ public:
     }
     }
 
-    if (num_ == 0) {
-      ++zeroCount_;
-    }
-
     // postcondition: 0 <= num < 100
     assert(0 <= num_ && num_ < 100);
 
     return *this;
   }
 
-  int dialNumber() const {
-      return num_;
-  }
+  int dialNumber() const { return num_; }
 
-  size_t zeroCount() const {
-      return zeroCount_;
-  }
+  size_t zeroCount() const { return zeroCount_; }
 
   void print(std::ostream &os) const { os << *this << '\n'; }
 
@@ -113,7 +126,8 @@ std::ifstream validateAndOpenFile(const std::string_view &filename) {
   return file;
 }
 
-std::expected<std::vector<std::string>, std::string> readLines(std::ifstream &file) {
+std::expected<std::vector<std::string>, std::string>
+readLines(std::ifstream &file) {
   if (!file.is_open()) {
     return std::unexpected("could not read from file stream");
   }
@@ -128,15 +142,15 @@ std::expected<std::vector<std::string>, std::string> readLines(std::ifstream &fi
 }
 
 size_t crackSafe(const std::vector<std::string> &safeOperations) {
-    SafeDial sd;
+  SafeDial sd;
 
-    for (const std::string& op : safeOperations) {
-        sd += op;
-    }
+  for (const std::string &op : safeOperations) {
+    sd += op;
+  }
 
-    if constexpr (debug) {
-        sd.print(std::cout);
-    }
+  if constexpr (debug) {
+    sd.print(std::cout);
+  }
 
-    return sd.zeroCount();
+  return sd.zeroCount();
 }

@@ -1,11 +1,12 @@
 #include <fstream>
 #include <iostream>
+#include <print>
 
 #include "safeCracking.hpp"
 
 int main(int argc, char *argv[]) {
   if (argc != 2) {
-    std::cerr << "Usage: " << argv[0] << " <input_file>\n";
+    std::println(std::cerr, "Usage: {} <input_file>", argv[0]);
     return -1;
   }
 
@@ -16,11 +17,14 @@ int main(int argc, char *argv[]) {
   // Read lines from file
   const std::expected<std::vector<std::string>, std::string> safeOps = readLines(file);
   if (!safeOps) {
-      std::cerr << safeOps.error() << '\n';
+      std::println(std::cerr, "{}", safeOps.error());
       return -1;
   }
 
   const size_t code = crackSafe(safeOps.value());
 
-  return code;
+  std::println("Code: {}", code);
+
+  // don't return safe code as exit values only go up to 255
+  return 0;
 }
