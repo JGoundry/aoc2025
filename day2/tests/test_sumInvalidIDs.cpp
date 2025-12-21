@@ -1,4 +1,4 @@
-#include "addInvalidIDs.hpp"
+#include "sumInvalidIDs.hpp"
 
 #include <cstdint>
 #include <gtest/gtest.h>
@@ -20,7 +20,7 @@ constexpr AddInvalidIDsTestData data{
 };
 
 TEST(AddInvalidIDs, TestData) {
-    const uint64_t result = addInvalidIDs(data.ranges);
+    const uint64_t result = sumInvalidIDs(data.ranges);
     EXPECT_EQ(result, data.expected);
 }
 

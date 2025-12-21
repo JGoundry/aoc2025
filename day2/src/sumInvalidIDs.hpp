@@ -3,6 +3,6 @@
 
 namespace day2 {
 
-uint64_t addInvalidIDs(const std::string_view& rangesStr);
+uint64_t sumInvalidIDs(const std::string_view& rangesStr);
 
 }

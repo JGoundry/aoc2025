@@ -1,4 +1,4 @@
-#include "addInvalidIDs.hpp"
+#include "sumInvalidIDs.hpp"
 
 #include <cstdint>
 #include <cstdlib>
@@ -62,12 +62,37 @@ std::vector<Range> parseRanges(const std::string_view &rangesStr) {
 }
 
 std::vector<uint64_t> gatherInvalidIDs(const Range &range) {
-  return std::vector<uint64_t>{};
+    std::vector<uint64_t> invalidIDs;
+
+  for (size_t id = range.lower; id <= range.upper; ++id) {
+    const std::string idStr = std::to_string(id);
+
+    // continue if starts with 0    
+    if (idStr.empty() || idStr[0] == '0')
+        continue;
+
+    // continue if odd number
+    if (idStr.size() % 2 == 1)
+        continue;
+
+    // split number in half
+    size_t mid = idStr.size() / 2;
+    std::string_view left(idStr.begin(), idStr.begin() + mid);
+    std::string_view right(idStr.begin() + mid, idStr.end());
+
+    // if left == right, invalid
+    if (left == right) {
+        invalidIDs.push_back(id);
+        DEBUG_PRINT("Invalid ID: " << id);
+    }
+  }
+
+  return invalidIDs;
 }
 
 } // namespace
 
-uint64_t addInvalidIDs(const std::string_view &rangesStr) {
+uint64_t sumInvalidIDs(const std::string_view &rangesStr) {
   DEBUG_PRINT("Input: " << rangesStr);
 
   const std::vector<Range> ranges = parseRanges(rangesStr);
@@ -78,6 +103,8 @@ uint64_t addInvalidIDs(const std::string_view &rangesStr) {
       sum += invalidID;
     }
   }
+
+  DEBUG_PRINT("Invalid IDs sum: " << sum);
 
   return sum;
 }

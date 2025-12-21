@@ -34,4 +34,18 @@ readLines(std::ifstream &file) {
   return lines;
 }
 
+std::expected<std::string, std::string>
+read(std::ifstream &file) {
+  if (!file.is_open()) {
+    return std::unexpected("could not read from file stream");
+  }
+
+  std::string data;
+  while (!file.eof()) {
+    file >> data;
+  }
+
+  return data;
+}
+
 }
