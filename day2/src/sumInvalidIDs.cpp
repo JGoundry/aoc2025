@@ -7,6 +7,7 @@
 #include <execution>
 #include <expected>
 #include <iostream>
+#include <numeric>
 #include <print>
 #include <ranges>
 #include <string>
@@ -124,16 +125,16 @@ std::uint64_t sumInvalidIDs(const std::string_view& rangesStr) {
 
   const std::vector<Range> ranges = parseRanges(rangesStr);
 
-  std::atomic<std::uint64_t> sum{};
-
-  std::for_each(std::execution::par, ranges.begin(), ranges.end(), [&sum](const Range r){
-            std::uint64_t internalSum{};
-            for (const std::uint64_t invalidID : gatherInvalidIDs(r))
-            {
-                internalSum += invalidID;
-            }
-            sum += internalSum;
-          });
+  // Use parallel unsequence (SIMD) execution policy to gather invalid IDs
+  const auto sum = std::transform_reduce(
+      std::execution::par_unseq, ranges.begin(), ranges.end(), std::uint64_t{},
+      std::plus{}, [](const Range r) {
+        std::uint64_t internalSum{};
+        for (const std::uint64_t invalidID : gatherInvalidIDs(r)) {
+          internalSum += invalidID;
+        }
+        return internalSum;
+      });
 
   DEBUG_PRINT("Invalid IDs sum: " << sum);
 
