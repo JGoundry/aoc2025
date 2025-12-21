@@ -1,4 +1,4 @@
-#include <fstream>
+#include <expected>
 #include <iostream>
 #include <print>
 
@@ -13,13 +13,16 @@ int main(int argc, char* argv[]) {
 
   // Validate filepath and open file
   const std::string_view filename = argv[1];
-  std::ifstream file = utils::validateAndOpenFile(filename);
+  auto file = utils::openFile(filename, std::ios_base::in);
+  if (!file) {
+    std::cerr << file.error() << '\n';
+    return -1;
+  }
 
   // Read lines from file
-  const std::expected<std::vector<std::string>, std::string> safeOps =
-      utils::readLines(file);
+  const auto safeOps = utils::readLines(*file);
   if (!safeOps) {
-    std::println(std::cerr, "{}", safeOps.error());
+    std::cerr << safeOps.error() << '\n';
     return -1;
   }
 

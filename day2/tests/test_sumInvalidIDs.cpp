@@ -21,7 +21,7 @@ constexpr SumInvalidIDsTestData data{
     .expected = 4174379265,
 };
 
-TEST(SumInvalidIDs, TestData) {
+TEST(Day2, SumInvalidIDs) {
   const std::uint64_t result = sumInvalidIDs(data.ranges);
   EXPECT_EQ(result, data.expected);
 }
