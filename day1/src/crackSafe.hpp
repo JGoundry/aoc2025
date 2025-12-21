@@ -2,9 +2,10 @@
 
 #include <string>
 #include <vector>
+#include <cstdint>
 
 namespace day1 {
 
-size_t crackSafe(const std::vector<std::string>& safeOperations);
+std::uint64_t crackSafe(const std::vector<std::string>& safeOperations);
 
 }  // namespace day1

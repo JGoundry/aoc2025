@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <cstdint>
 
 #include "crackSafe.hpp"
 
@@ -8,12 +9,12 @@ namespace {
 
 struct CrackSafeTestData {
   const std::vector<std::string> safeOps;
-  const size_t expected;
+  const std::uint64_t expected;
 };
 
 const CrackSafeTestData data{
     .safeOps =
-        std::vector<std::string>{
+        {
             "L68",
             "L30",
             "R48",

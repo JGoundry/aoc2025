@@ -1,3 +1,4 @@
+#include <cstdint>
 #include <expected>
 #include <iostream>
 #include <print>
@@ -26,7 +27,7 @@ int main(int argc, char* argv[]) {
     return -1;
   }
 
-  const size_t code = day1::crackSafe(safeOps.value());
+  const std::uint64_t code = day1::crackSafe(safeOps.value());
 
   std::println("Safe code: {}", code);
 

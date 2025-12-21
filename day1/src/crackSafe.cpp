@@ -1,6 +1,7 @@
 #include "crackSafe.hpp"
 
 #include <cassert>
+#include <cstdint>
 #include <cstdlib>
 #include <exception>
 #include <expected>
@@ -105,7 +106,7 @@ class SafeDial {
 
 }  // namespace
 
-size_t crackSafe(const std::vector<std::string>& safeOperations) {
+std::uint64_t crackSafe(const std::vector<std::string>& safeOperations) {
   SafeDial sd;
 
   DEBUG_PRINT(sd);
