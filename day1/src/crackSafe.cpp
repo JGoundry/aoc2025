@@ -33,8 +33,6 @@ std::expected<int, std::exception> safeOpToInt(const std::string &str) {
 
 class SafeDial {
 public:
-  SafeDial() : num_(50), zeroCount_(0) {}
-
   SafeDial &operator+=(const std::string_view &op) {
     // precondition: 0 <= num < 100
     assert(0 <= num_ && num_ < 100);
@@ -104,8 +102,8 @@ public:
   }
 
 private:
-  int num_;
-  size_t zeroCount_;
+  int num_{50};
+  size_t zeroCount_{};
 };
 
 } // namespace anonymous 
