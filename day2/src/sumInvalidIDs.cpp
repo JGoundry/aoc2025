@@ -1,8 +1,10 @@
 #include "sumInvalidIDs.hpp"
 
+#include <atomic>
 #include <cstddef>
 #include <cstdint>
 #include <cstdlib>
+#include <execution>
 #include <expected>
 #include <iostream>
 #include <print>
@@ -122,12 +124,16 @@ std::uint64_t sumInvalidIDs(const std::string_view& rangesStr) {
 
   const std::vector<Range> ranges = parseRanges(rangesStr);
 
-  std::uint64_t sum{};
-  for (const Range& range : ranges) {
-    for (const std::uint64_t invalidID : gatherInvalidIDs(range)) {
-      sum += invalidID;
-    }
-  }
+  std::atomic<std::uint64_t> sum{};
+
+  std::for_each(std::execution::par, ranges.begin(), ranges.end(), [&sum](const Range r){
+            std::uint64_t internalSum{};
+            for (const std::uint64_t invalidID : gatherInvalidIDs(r))
+            {
+                internalSum += invalidID;
+            }
+            sum += internalSum;
+          });
 
   DEBUG_PRINT("Invalid IDs sum: " << sum);
 
