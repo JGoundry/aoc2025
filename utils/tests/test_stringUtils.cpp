@@ -1,9 +1,8 @@
-#include "utils/stringUtils.hpp"
-
-#include "gtest/gtest.h"
 #include <gtest/gtest.h>
 
 #include <array>
+
+#include "utils/stringUtils.hpp"
 
 namespace utils {
 namespace testing {
@@ -28,15 +27,15 @@ constexpr std::array data{
 class TrimWhitespaceTest
     : public ::testing::TestWithParam<TrimWhitespaceTestData> {};
 
-} // namespace
+}  // namespace
 
 TEST_P(TrimWhitespaceTest, TrimWhitespace) {
-    const TrimWhitespaceTestData& testData = GetParam();
-    const std::string result = trimWhitespace(testData.input);
-    EXPECT_EQ(result, testData.expected);
+  const TrimWhitespaceTestData& testData = GetParam();
+  const std::string result = trimWhitespace(testData.input);
+  EXPECT_EQ(result, testData.expected);
 }
 
 INSTANTIATE_TEST_SUITE_P(, TrimWhitespaceTest, ::testing::ValuesIn(data));
 
-} // namespace testing
-} // namespace utils
+}  // namespace testing
+}  // namespace utils

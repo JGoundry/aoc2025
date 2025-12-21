@@ -3,10 +3,9 @@
 #include <expected>
 #include <filesystem>
 
-namespace utils
-{
+namespace utils {
 
-std::ifstream validateAndOpenFile(const std::string_view &path) {
+std::ifstream validateAndOpenFile(const std::string_view& path) {
   std::filesystem::path p(path);
   std::ifstream file;
 
@@ -19,8 +18,8 @@ std::ifstream validateAndOpenFile(const std::string_view &path) {
   return file;
 }
 
-std::expected<std::vector<std::string>, std::string>
-readLines(std::ifstream &file) {
+std::expected<std::vector<std::string>, std::string> readLines(
+    std::ifstream& file) {
   if (!file.is_open()) {
     return std::unexpected("could not read from file stream");
   }
@@ -34,8 +33,7 @@ readLines(std::ifstream &file) {
   return lines;
 }
 
-std::expected<std::string, std::string>
-read(std::ifstream &file) {
+std::expected<std::string, std::string> read(std::ifstream& file) {
   if (!file.is_open()) {
     return std::unexpected("could not read from file stream");
   }
@@ -48,4 +46,4 @@ read(std::ifstream &file) {
   return data;
 }
 
-}
+}  // namespace utils

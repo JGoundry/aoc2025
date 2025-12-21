@@ -1,7 +1,5 @@
 #include "crackSafe.hpp"
 
-#include "utils/stringUtils.hpp"
-
 #include <cassert>
 #include <cstdlib>
 #include <exception>
@@ -10,30 +8,29 @@
 #include <iostream>
 #include <string>
 
-namespace day1
-{
-namespace
-{
+#include "utils/stringUtils.hpp"
+
+namespace day1 {
+namespace {
 
 bool debug = std::getenv("AOC_DEBUG");
 
-#define DEBUG_PRINT(msg)                                                       \
-  if (debug)                                                                   \
-    std::cout << msg << '\n'
+#define DEBUG_PRINT(msg) \
+  if (debug) std::cout << msg << '\n'
 
-std::expected<int, std::exception> safeOpToInt(const std::string &str) {
+std::expected<int, std::exception> safeOpToInt(const std::string& str) {
   try {
     auto num = std::string(str.begin() + 1, str.end());
     return std::stoi(num);
 
-  } catch (const std::exception &e) {
+  } catch (const std::exception& e) {
     return std::unexpected(e);
   }
 }
 
 class SafeDial {
-public:
-  SafeDial &operator+=(const std::string_view &op) {
+ public:
+  SafeDial& operator+=(const std::string_view& op) {
     // precondition: 0 <= num < 100
     assert(0 <= num_ && num_ < 100);
 
@@ -65,13 +62,13 @@ public:
         zeroCount_ += div + (num_ != 0);
       }
 
-      if (mod >= 0) { // positive remainder, never crossed 0
+      if (mod >= 0) {  // positive remainder, never crossed 0
         num_ = mod;
-      } else { // negative remainder, need to wrap back round and takeaway the
-               // negative value from 100
+      } else {  // negative remainder, need to wrap back round and takeaway the
+                // negative value from 100
         num_ = 100 + mod;
       }
-    } else { // 'R'
+    } else {  // 'R'
       const int div = (num_ + *input) / 100;
       const int mod = (num_ + *input) % 100;
 
@@ -94,26 +91,26 @@ public:
 
   size_t zeroCount() const { return zeroCount_; }
 
-  void print(std::ostream &os) const { os << *this << '\n'; }
+  void print(std::ostream& os) const { os << *this << '\n'; }
 
-  friend std::ostream &operator<<(std::ostream &os, const SafeDial &sd) {
+  friend std::ostream& operator<<(std::ostream& os, const SafeDial& sd) {
     os << "Safe num:   " << sd.num_ << '\n' << "Zero count: " << sd.zeroCount_;
     return os;
   }
 
-private:
+ private:
   int num_{50};
   size_t zeroCount_{};
 };
 
-} // namespace anonymous 
+}  // namespace
 
-size_t crackSafe(const std::vector<std::string> &safeOperations) {
+size_t crackSafe(const std::vector<std::string>& safeOperations) {
   SafeDial sd;
 
   DEBUG_PRINT(sd);
 
-  for (const std::string &op : safeOperations) {
+  for (const std::string& op : safeOperations) {
     sd += op;
   }
 
@@ -122,4 +119,4 @@ size_t crackSafe(const std::vector<std::string> &safeOperations) {
   return sd.zeroCount();
 }
 
-} // namespace day1
+}  // namespace day1

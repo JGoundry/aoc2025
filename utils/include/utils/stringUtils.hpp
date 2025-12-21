@@ -3,9 +3,8 @@
 #include <string>
 #include <string_view>
 
-namespace utils
-{
+namespace utils {
 
-std::string trimWhitespace(const std::string_view &sv);
+std::string trimWhitespace(const std::string_view& sv);
 
 }
