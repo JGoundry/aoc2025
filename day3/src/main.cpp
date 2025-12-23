@@ -4,7 +4,7 @@
 #include "maxJoltage.hpp"
 #include "utils/fileUtils.hpp"
 
-int main(int argc, char** argv) {
+int main(int argc, char* argv[]) {
   if (argc != 2) {
     std::println(std::cerr, "Usage: {} <input_file>", argv[0]);
     return -1;
