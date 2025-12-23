@@ -14,7 +14,7 @@
 namespace day1 {
 namespace {
 
-bool debug = std::getenv("AOC_DEBUG");
+const bool debug = std::getenv("AOC_DEBUG");
 
 #define DEBUG_PRINT(msg) \
   if (debug) std::cout << msg << '\n'
