@@ -7,8 +7,8 @@ constexpr std::uint64_t paperLimit = 4;
 constexpr char paperRoll = '@';
 constexpr char nonPaper = '.';
 
-constexpr bool accessibleSpot(const std::vector<std::string>& grid,
-                              std::int64_t row, std::int64_t col) {
+bool accessibleSpot(const std::vector<std::string>& grid, std::int64_t row,
+                    std::int64_t col) {
   if (row < 0 || row >= grid.size()) return true;
   if (col < 0 || col >= grid[row].size()) return true;
 
