@@ -26,17 +26,18 @@ template <typename T>
 void recursiveBatteryUpdate(
     const std::string& batteryBank, std::uint8_t batteryBankIdxToCheck,
     const std::ranges::subrange<T> currentLargestBatteries) {
-  // stop condition, we have no more batteries in the range to update
+  // Stop condition: we have no more batteries in the range to update
   if (currentLargestBatteries.empty()) return;
 
-  // check if new battery we is bigger
+  // Check if new battery is bigger than what we have stored currently
   if (batteryBank[batteryBankIdxToCheck] >=
       batteryBank[currentLargestBatteries.front()]) {
-    // store old idx and update the current largest battery idx
-    auto oldIdx = currentLargestBatteries.front();
+    // Store old idx and update the current largest battery idx
+    const auto oldIdx = currentLargestBatteries.front();
     *currentLargestBatteries.begin() = batteryBankIdxToCheck;
 
-    // recurse with oldIdx and range starting from the next battery we have
+    // Recurse with the old largest battery and range starting from the next
+    // battery we have
     recursiveBatteryUpdate(
         batteryBank, oldIdx,
         std::ranges::subrange(std::next(currentLargestBatteries.begin()),
@@ -67,9 +68,11 @@ std::uint64_t maxJoltage(const std::string& batteryBank,
 
   // Get the last n battery indexes
   std::vector<std::uint8_t> largestBatteryIdxs(requestedBatteries);
-  auto i = batteryBank.size() - requestedBatteries;
-  std::ranges::generate(largestBatteryIdxs,
-                        [&i] -> std::uint8_t { return i++; });
+  std::ranges::generate(
+      largestBatteryIdxs,
+      [i = batteryBank.size() - requestedBatteries] mutable -> std::uint8_t {
+        return i++;
+      });
 
   // Iterate over battery bank backwards and update batteries recursively
   // whenever we see a larger battery
@@ -82,9 +85,8 @@ std::uint64_t maxJoltage(const std::string& batteryBank,
   // Convert battery indexes to an actual number
   try {
     std::string batteries(requestedBatteries, 0);
-    std::transform(largestBatteryIdxs.begin(), largestBatteryIdxs.end(),
-                   batteries.begin(),
-                   [&](std::uint8_t idx) { return batteryBank[idx]; });
+    std::ranges::transform(largestBatteryIdxs, batteries.begin(),
+                           [&](std::uint8_t idx) { return batteryBank[idx]; });
     return std::stoll(batteries);
   } catch (const std::exception& e) {
     DEBUG_PRINT("Caught exception converting battery stoll: " << e.what());
@@ -95,7 +97,7 @@ std::uint64_t maxJoltage(const std::string& batteryBank,
 }  // namespace
 
 std::uint64_t maxJoltage(const std::vector<std::string>& batteryBanks,
-                         std::uint8_t requestedBatteries) {
+                         const std::uint8_t requestedBatteries) {
   const auto sum = std::transform_reduce(
       std::execution::par_unseq, batteryBanks.begin(), batteryBanks.end(),
       std::uint64_t{}, std::plus{},
