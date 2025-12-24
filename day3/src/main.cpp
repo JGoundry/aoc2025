@@ -1,8 +1,16 @@
+#include <cstdint>
 #include <iostream>
 #include <print>
 
 #include "maxJoltage.hpp"
 #include "utils/fileUtils.hpp"
+
+namespace {
+
+// part1 = 2, part2 = 12
+constexpr std::uint8_t requestedBatteries = 12;
+
+}
 
 int main(int argc, char* argv[]) {
   if (argc != 2) {
@@ -26,7 +34,7 @@ int main(int argc, char* argv[]) {
   }
 
   // Get max jolts
-  const auto maxJoltage = day3::maxJoltage(*batteryBanks);
+  const auto maxJoltage = day3::maxJoltage(*batteryBanks, requestedBatteries);
 
   std::println("Max joltage: {}", maxJoltage);
 

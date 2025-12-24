@@ -1,9 +1,11 @@
 #include "maxJoltage.hpp"
 
+#include <algorithm>
 #include <cstdint>
 #include <cstdlib>
 #include <exception>
 #include <execution>
+#include <functional>
 #include <iostream>
 #include <iterator>
 #include <string>
@@ -20,11 +22,35 @@ std::uint8_t charToInt(const char c) {
   return c - '0';
 }
 
-std::uint8_t maxJoltage(const std::string& batteryBank) {
+template <typename T>
+void recursiveBatteryUpdate(
+    const std::string& batteryBank, std::uint8_t batteryBankIdxToCheck,
+    const std::ranges::subrange<T> currentLargestBatteries) {
+  // stop condition, we have no more batteries in the range to update
+  if (currentLargestBatteries.empty()) return;
+
+  // check if new battery we is bigger
+  if (batteryBank[batteryBankIdxToCheck] >=
+      batteryBank[currentLargestBatteries.front()]) {
+    // store old idx and update the current largest battery idx
+    auto oldIdx = currentLargestBatteries.front();
+    *currentLargestBatteries.begin() = batteryBankIdxToCheck;
+
+    // recurse with oldIdx and range starting from the next battery we have
+    recursiveBatteryUpdate(
+        batteryBank, oldIdx,
+        std::ranges::subrange(std::next(currentLargestBatteries.begin()),
+                              currentLargestBatteries.end()));
+  }
+}
+
+std::uint64_t maxJoltage(const std::string& batteryBank,
+                         const std::uint8_t requestedBatteries) {
   DEBUG_PRINT("Proccessing battery bank: " << batteryBank);
 
-  if (batteryBank.empty()) {
-    DEBUG_PRINT(" - Empty, returning 0")
+  if (batteryBank.size() < requestedBatteries) {
+    DEBUG_PRINT(" - Battery bank not big enough for requseted batteries: "
+                << requestedBatteries);
     return 0;
   }
 
@@ -33,51 +59,50 @@ std::uint8_t maxJoltage(const std::string& batteryBank) {
     return charToInt(batteryBank[0]);
   }
 
-  std::uint64_t l = batteryBank.size() - 2;
-  std::uint64_t r = batteryBank.size() - 1;
+  // To solve this we will iterate over the battery bank backwards
+  // We can take the last n requested and then work towards the start
+  // If we see a larger battery than our first we will update it, the old
+  // battery will now be the next largest avaliable so we can recurse down our
+  // stored batteries and update.
 
-  DEBUG_PRINT("Starting batteries: " << batteryBank[l] << " "
-                                     << batteryBank[r]);
+  // Get the last n battery indexes
+  std::vector<std::uint8_t> largestBatteryIdxs(requestedBatteries);
+  auto i = batteryBank.size() - requestedBatteries;
+  std::ranges::generate(largestBatteryIdxs,
+                        [&i] -> std::uint8_t { return i++; });
 
-  // iterate over battery bank backwards and update l or r if we see a bigger
-  // battery
-  for (auto it = batteryBank.rbegin() + 2; it != batteryBank.rend();
-       std::advance(it, 1)) {
-    // update if battery bigger than current left
-    if (*it >= batteryBank[l]) {
-      DEBUG_PRINT("- New largest battery for l: " << *it);
-
-      const auto oldBattery = l;
-
-      // update left battery index
-      l = std::distance(batteryBank.begin(), std::prev(it.base(), 1));
-
-      // update right battery if old left was bigger
-      if (batteryBank[oldBattery] >= batteryBank[r]) {
-        DEBUG_PRINT("- New largest battery for r: " << batteryBank[oldBattery]);
-        r = oldBattery;
-      }
-    }
+  // Iterate over battery bank backwards and update batteries recursively
+  // whenever we see a larger battery
+  for (auto batteryIdxToCheck = largestBatteryIdxs.front() - 1;
+       batteryIdxToCheck >= 0; --batteryIdxToCheck) {
+    recursiveBatteryUpdate(batteryBank, batteryIdxToCheck,
+                           std::ranges::subrange(largestBatteryIdxs));
   }
 
-  DEBUG_PRINT("Final largest batteries: " << batteryBank[l] << " "
-                                          << batteryBank[r]);
-
+  // Convert battery indexes to an actual number
   try {
-    return std::stoi(std::string{batteryBank[l], batteryBank[r]});
+    std::string batteries(requestedBatteries, 0);
+    std::transform(largestBatteryIdxs.begin(), largestBatteryIdxs.end(),
+                   batteries.begin(),
+                   [&](std::uint8_t idx) { return batteryBank[idx]; });
+    return std::stoll(batteries);
   } catch (const std::exception& e) {
-    DEBUG_PRINT("Caught exception converting battery stoi: " << e.what());
+    DEBUG_PRINT("Caught exception converting battery stoll: " << e.what());
     return 0;
   }
 }
 
 }  // namespace
 
-std::uint64_t maxJoltage(const std::vector<std::string>& batteryBanks) {
+std::uint64_t maxJoltage(const std::vector<std::string>& batteryBanks,
+                         std::uint8_t requestedBatteries) {
   const auto sum = std::transform_reduce(
       std::execution::par_unseq, batteryBanks.begin(), batteryBanks.end(),
       std::uint64_t{}, std::plus{},
-      static_cast<std::uint8_t (*)(const std::string&)>(maxJoltage));
+      std::bind(
+          static_cast<std::uint64_t (*)(const std::string&, std::uint8_t)>(
+              maxJoltage),
+          std::placeholders::_1, requestedBatteries));
 
   return sum;
 }

@@ -6,6 +6,6 @@
 
 namespace day3 {
 
-std::uint64_t maxJoltage(const std::vector<std::string>& batteryBanks);
+std::uint64_t maxJoltage(const std::vector<std::string>& batteryBanks, std::uint8_t requestedBatteries);
 
 }
