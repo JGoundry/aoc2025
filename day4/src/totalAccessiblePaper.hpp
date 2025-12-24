@@ -6,6 +6,6 @@
 
 namespace day4 {
 
-std::uint64_t totalAccessiblePaper(const std::vector<std::string>& grid);
+std::uint64_t totalAccessiblePaper(std::vector<std::string> grid);
 
 }

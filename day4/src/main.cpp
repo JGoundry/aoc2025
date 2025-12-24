@@ -19,13 +19,13 @@ int main(int argc, char* argv[]) {
   }
 
   // Read lines from file
-  const auto grid = utils::readLines(*file);
+  auto grid = utils::readLines(*file);
   if (!grid) {
     std::cerr << grid.error() << '\n';
     return -1;
   }
 
-  const auto totalAccessiblePaper = day4::totalAccessiblePaper(*grid);
+  const auto totalAccessiblePaper = day4::totalAccessiblePaper(std::move(*grid));
 
   std::println("Total accessible paper: {}", totalAccessiblePaper);
 

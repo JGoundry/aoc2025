@@ -37,7 +37,7 @@ INSTANTIATE_TEST_SUITE_P(
                                                       {"@.@@@.@@@@"},
                                                       {".@@@@@@@@."},
                                                       {"@.@.@@@.@."}},
-                                                     13},
+                                                     43},
                       TotalAccessiblePaperTestParams{{{"..."},
                                                       {".@."},
                                                       {"..."}},
