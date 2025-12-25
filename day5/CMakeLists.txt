@@ -1,5 +1,5 @@
 # Logic
-add_library(day5_logic SHARED src/totalFreshIngredients.cpp)
+add_library(day5_logic STATIC src/totalFreshIngredients.cpp)
 target_include_directories(day5_logic PUBLIC src)
 target_link_libraries(day5_logic PRIVATE utils)
 

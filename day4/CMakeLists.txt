@@ -1,5 +1,5 @@
 # Logic lib
-add_library(day4_logic SHARED src/totalAccessiblePaper.cpp)
+add_library(day4_logic STATIC src/totalAccessiblePaper.cpp)
 target_include_directories(day4_logic PUBLIC src)
 
 # Main
