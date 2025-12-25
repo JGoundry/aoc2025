@@ -1,6 +1,7 @@
 # Logic lib
 add_library(day2_logic STATIC src/sumInvalidIDs.cpp)
 target_include_directories(day2_logic PUBLIC src)
+target_link_libraries(day2_logic PRIVATE utils)
 
 # Main executable
 add_executable(day2 src/main.cpp)
