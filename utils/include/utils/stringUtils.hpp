@@ -9,8 +9,10 @@
 namespace utils {
 
 struct Range {
-  std::int64_t lower;
-  std::int64_t upper;
+  std::uint64_t lower;
+  std::uint64_t upper;
+
+  auto operator<=>(const Range& other) const = default;
 
   friend std::ostream& operator<<(std::ostream& os, const Range& r);
 };

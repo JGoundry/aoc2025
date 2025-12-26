@@ -1,13 +1,14 @@
 #include "utils/stringUtils.hpp"
 
+#include <cstdint>
 #include <ranges>
 
 namespace utils {
 namespace {
 
-std::expected<long long, std::exception> strToInt(const std::string& str) {
+std::expected<std::uint64_t, std::exception> strToUInt64(const std::string& str) {
   try {
-    return std::stoll(str);
+    return std::stoull(str);
   } catch (const std::exception& e) {
     return std::unexpected(e);
   }
@@ -40,9 +41,9 @@ std::expected<Range, std::string> parseRange(const std::string_view& range) {
     return std::unexpected(std::format("Invalid range: {}", range));
   }
 
-  const auto& lower = strToInt(std::string(range.begin(), seperatorIdx));
+  const auto& lower = strToUInt64(std::string(range.begin(), seperatorIdx));
   const auto& upper =
-      strToInt(std::string(range.begin() + seperatorIdx + 1, range.end()));
+      strToUInt64(std::string(range.begin() + seperatorIdx + 1, range.end()));
 
   if (!lower || !upper) {
     return std::unexpected(std::format("Invalid range: {} ", range));
