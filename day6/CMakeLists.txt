@@ -3,6 +3,8 @@ add_library(day6_logic STATIC src/solveHomework.cpp)
 target_include_directories(day6_logic PUBLIC src)
 
 # Main
+add_executable(day6 src/main.cpp)
+target_link_libraries(day6 PRIVATE utils day6_logic)
 
 # Test
 add_executable(test_day6 tests/test_solveHomework.cpp)
