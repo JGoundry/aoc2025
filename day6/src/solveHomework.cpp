@@ -72,8 +72,6 @@ std::uint64_t solveHomework(const std::vector<std::string>& homework) {
   auto cols =
       std::ranges::max_element(homework, {}, &std::string::size)->size();
 
-  std::println("maxElem: {}", cols);
-
   auto operationIdx{0};
   for (auto col{0}; col < cols; ++col) {
     std::string word;
