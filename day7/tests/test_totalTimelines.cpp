@@ -3,7 +3,7 @@
 #include <cstdint>
 
 #include "gtest/gtest.h"
-#include "splitBeams.hpp"
+#include "totalTimelines.hpp"
 
 namespace day7 {
 namespace testing {
@@ -18,9 +18,9 @@ class Day7 : public ::testing::TestWithParam<Day7TestParams> {};
 
 }  // namespace
 
-TEST_P(Day7, SplitBeams) {
+TEST_P(Day7, TotalTimelines) {
   const auto& data = GetParam();
-  EXPECT_EQ(data.expected, splitBeams(data.diagram));
+  EXPECT_EQ(data.expected, totalTimelines(data.diagram));
 }
 
 INSTANTIATE_TEST_SUITE_P(, Day7,
@@ -40,7 +40,7 @@ INSTANTIATE_TEST_SUITE_P(, Day7,
                                                            {"..............."},
                                                            {".^.^.^.^.^...^."},
                                                            {"..............."}},
-                                                          21}));
+                                                          40}));
 
 }  // namespace testing
 }  // namespace day7

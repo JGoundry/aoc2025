@@ -2,7 +2,7 @@
 #include <iostream>
 #include <print>
 
-#include "splitBeams.hpp"
+#include "totalTimelines.hpp"
 #include "utils/fileUtils.hpp"
 
 int main(int argc, char* argv[]) {
@@ -26,7 +26,7 @@ int main(int argc, char* argv[]) {
     return -1;
   }
 
-  const auto ans = day7::splitBeams(*homework);
+  const auto ans = day7::totalTimelines(*homework);
 
   std::println("Total split beams: {}", ans);
 

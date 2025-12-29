@@ -6,6 +6,6 @@
 
 namespace day7 {
 
-std::uint64_t splitBeams(const std::vector<std::string>& diagram);
+std::uint64_t totalTimelines(const std::vector<std::string>& diagram);
 
 }
