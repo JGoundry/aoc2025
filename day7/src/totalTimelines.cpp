@@ -6,6 +6,7 @@
 #include <map>
 
 namespace day7 {
+namespace {
 
 using TimelineCountMap = std::map<std::pair<size_t, size_t>, size_t>;
 
@@ -29,6 +30,8 @@ std::uint64_t split(TimelineCountMap& memo,
   }
 
   return split(memo, diagram, beamRow + 1, beamCol);
+}
+
 }
 
 std::uint64_t totalTimelines(const std::vector<std::string>& diagram) {
