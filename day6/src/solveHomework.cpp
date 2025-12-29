@@ -11,7 +11,6 @@
 #include <print>
 #include <ranges>
 #include <string>
-#include <string_view>
 
 namespace day6 {
 namespace {
@@ -33,9 +32,6 @@ concept OpsT = std::default_initializable<T> && std::constructible_from<T, T> &&
                };
 
 template <OpsT T>
-using Operands = std::vector<T>;
-
-template <OpsT T>
 struct Operation {
   std::vector<T> operands;
   Operator op;
@@ -47,7 +43,7 @@ struct Operation {
       case Operator::Multiply:
         return reduce(std::multiplies<>{}, T{1});
       default:
-        return 0;
+        return {};
     }
   }
 
@@ -76,6 +72,8 @@ std::uint64_t solveHomework(const std::vector<std::string>& homework) {
   auto cols =
       std::ranges::max_element(homework, {}, &std::string::size)->size();
 
+  std::println("maxElem: {}", cols);
+
   auto operationIdx{0};
   for (auto col{0}; col < cols; ++col) {
     std::string word;
@@ -86,6 +84,7 @@ std::uint64_t solveHomework(const std::vector<std::string>& homework) {
       if (c < '0' || c > '9') continue;
       word.push_back(c);
     }
+
     if (word.empty()) {
       ++operationIdx;
       continue;
@@ -93,7 +92,7 @@ std::uint64_t solveHomework(const std::vector<std::string>& homework) {
 
     if (operationIdx >= operations.size()) {
       std::println(std::cerr, "ERROR: Ill formed homework.");
-      return 1;
+      return {};
     }
 
     try {
