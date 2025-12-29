@@ -29,7 +29,7 @@ INSTANTIATE_TEST_SUITE_P(, Day6,
                              " 45 64  387 23",
                               "  6 98  215 314",
                               "*   +   *   +"},
-                             4277556}));
+                             3263827}));
 
 }  // namespace testing
 }  // namespace day6

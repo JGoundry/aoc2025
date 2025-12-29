@@ -1,12 +1,17 @@
 #include "solveHomework.hpp"
 
+#include <algorithm>
+#include <cassert>
 #include <concepts>
 #include <cstdint>
+#include <exception>
 #include <functional>
 #include <iostream>
 #include <numeric>
 #include <print>
 #include <ranges>
+#include <string>
+#include <string_view>
 
 namespace day6 {
 namespace {
@@ -21,8 +26,8 @@ enum class Operator : char {
 };
 
 template <typename T>
-concept OpsT = std::default_initializable<T> &&
-               std::constructible_from<T, int> && requires(T a, T b) {
+concept OpsT = std::default_initializable<T> && std::constructible_from<T, T> &&
+               requires(T a, T b) {
                  { a + b } -> std::convertible_to<T>;
                  { a * b } -> std::convertible_to<T>;
                };
@@ -55,7 +60,7 @@ struct Operation {
 }  // namespace
 
 std::uint64_t solveHomework(const std::vector<std::string>& homework) {
-  if (homework.empty()) return {};
+  if (homework.size() <= 1) return {};
 
   auto operations =
       homework.back() | std::views::split(' ') |
@@ -67,21 +72,37 @@ std::uint64_t solveHomework(const std::vector<std::string>& homework) {
 
   if (operations.empty()) return {};
 
-  auto allOperands =
-      homework | std::views::take(homework.size() - 1) |
-      std::views::transform([](const std::string& row) {
-        return row | std::views::split(' ') |
-               std::views::filter([](auto&& charRange) {
-                 return !std::ranges::empty(charRange);
-               }) |
-               std::views::transform([](auto&& charRange) {
-                 return std::stoull(std::string(std::string_view(charRange)));
-               });
-      }) |
-      std::views::join;
+  auto rows = homework.size() - 1;
+  auto cols =
+      std::ranges::max_element(homework, {}, &std::string::size)->size();
 
-  for (auto&& [idx, operand] : allOperands | std::views::enumerate) {
-    operations[idx % operations.size()].operands.emplace_back(operand);
+  auto operationIdx{0};
+  for (auto col{0}; col < cols; ++col) {
+    std::string word;
+    word.reserve(rows);
+    for (auto row{0}; row < rows; ++row) {
+      if (row >= homework.size() || col >= homework[row].size()) continue;
+      const char c = homework[row][col];
+      if (c < '0' || c > '9') continue;
+      word.push_back(c);
+    }
+    if (word.empty()) {
+      ++operationIdx;
+      continue;
+    }
+
+    if (operationIdx >= operations.size()) {
+      std::println(std::cerr, "ERROR: Ill formed homework.");
+      return 1;
+    }
+
+    try {
+      operations[operationIdx].operands.emplace_back(std::stoull(word));
+
+    } catch (const std::exception& e) {
+      std::println("Caught exception converting '{}' to number: {}", word,
+                   e.what());
+    }
   }
 
   if (debug) {
