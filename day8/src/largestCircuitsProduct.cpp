@@ -1,8 +1,11 @@
 #include "largestCircuitsProduct.hpp"
 
+#include <cstdint>
+
 namespace day8 {
 
-std::uint64_t largestCircuitsProduct(const std::vector<std::string>& coordinates) {
+std::uint64_t largestCircuitsProduct(
+    const std::vector<std::string>& coordinates) {
   return {};
 }
 

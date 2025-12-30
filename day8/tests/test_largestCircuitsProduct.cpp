@@ -18,6 +18,11 @@ class Day8 : public ::testing::TestWithParam<Day8TestParams> {};
 
 }  // namespace
 
+TEST(EuclideanDistance3D, Test) {
+  EXPECT_DOUBLE_EQ(316.90219311326956,
+                   euclideanDistance({162, 817, 812}, {425, 690, 689}));
+}
+
 TEST_P(Day8, LargestCircuitsProduct) {
   const auto& data = GetParam();
   EXPECT_EQ(data.expected, largestCircuitsProduct(data.coordinates));
