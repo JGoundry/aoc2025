@@ -19,7 +19,7 @@ int main(int argc, char* argv[]) {
   }
 
   // Read lines from file
-  auto grid = utils::readLines(*file);
+  const auto& grid = utils::readLines(*file);
   if (!grid) {
     std::cerr << grid.error() << '\n';
     return -1;

@@ -1,7 +1,8 @@
+
 #include <iostream>
 #include <print>
 
-#include "solveHomework.hpp"
+#include "largestCircuitsProduct.hpp"
 #include "utils/fileUtils.hpp"
 
 int main(int argc, char* argv[]) {
@@ -19,15 +20,15 @@ int main(int argc, char* argv[]) {
   }
 
   // Read lines from file
-  const auto& homework = utils::readLines(*file);
-  if (!homework) {
-    std::cerr << homework.error() << '\n';
+  const auto& coordinates = utils::readLines(*file);
+  if (!coordinates) {
+    std::cerr << coordinates.error() << '\n';
     return -1;
   }
 
-  const auto ans = day6::solveHomework(*homework);
+  const auto ans = day8::largestCircuitsProduct(*coordinates);
 
-  std::println("Homework answer: {}", ans);
+  std::println("Largest circuits product: {}", ans);
 
   return 0;
 }

@@ -19,7 +19,7 @@ int main(int argc, char* argv[]) {
   }
 
   // Read lines from file
-  auto database = utils::readLines(*file);
+  const auto& database = utils::readLines(*file);
   if (!database) {
     std::cerr << database.error() << '\n';
     return -1;

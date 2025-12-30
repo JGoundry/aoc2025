@@ -27,7 +27,7 @@ int main(int argc, char* argv[]) {
   }
 
   // Read lines from file
-  const auto batteryBanks = utils::readLines(*file);
+  const auto& batteryBanks = utils::readLines(*file);
   if (!batteryBanks) {
     std::cerr << batteryBanks.error() << '\n';
     return -1;

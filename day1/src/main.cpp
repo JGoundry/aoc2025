@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
   }
 
   // Read lines from file
-  const auto safeOps = utils::readLines(*file);
+  const auto& safeOps = utils::readLines(*file);
   if (!safeOps) {
     std::cerr << safeOps.error() << '\n';
     return -1;

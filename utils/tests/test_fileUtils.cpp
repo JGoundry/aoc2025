@@ -14,7 +14,7 @@ TEST(OpenFile, EmptyPath) {
 
 TEST(ReadLines, EmptyStream) {
   std::ifstream file;
-  const auto result = readLines(file);
+  const auto& result = readLines(file);
   EXPECT_FALSE(result);
 }
 

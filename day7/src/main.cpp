@@ -20,7 +20,7 @@ int main(int argc, char* argv[]) {
   }
 
   // Read lines from file
-  auto homework = utils::readLines(*file);
+  const auto& homework = utils::readLines(*file);
   if (!homework) {
     std::cerr << homework.error() << '\n';
     return -1;
