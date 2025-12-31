@@ -7,12 +7,13 @@
 
 namespace day8 {
 
-struct Position {
+struct Point {
   std::uint64_t x, y, z;
-  auto operator<=>(const Position& rhs) const = default;
+  auto operator<=>(const Point& rhs) const = default;
+  friend std::ostream& operator<<(std::ostream& os, const Point& p);
 };
 
-constexpr double euclideanDistance(const Position& a, const Position& b) {
+constexpr double euclideanDistance(const Point& a, const Point& b) {
   const double dx = static_cast<double>(b.x) - a.x;
   const double dy = static_cast<double>(b.y) - a.y;
   const double dz = static_cast<double>(b.z) - a.z;
