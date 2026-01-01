@@ -41,12 +41,12 @@ std::expected<std::ifstream, FileError> openFile(
   // 1. Check filepath exists
   if (!std::filesystem::exists(p, ec)) {
     return std::unexpected(
-        FileError{p, FileErrorCode::FileNotFound, ec.message()});
+        FileError{p, FileErrorCode::FileNotFound, (ec ? ec.message() : std::string{}) });
   }
 
   // 2. File type check
   if (!std::filesystem::is_regular_file(p)) {
-    return std::unexpected(FileError{p, FileErrorCode::NotAFile, ec.message()});
+    return std::unexpected(FileError{p, FileErrorCode::NotAFile, (ec ? ec.message() : std::string{})});
   }
 
   // 3. Open file
