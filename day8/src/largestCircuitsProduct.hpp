@@ -20,7 +20,6 @@ constexpr double euclideanDistance(const Point& a, const Point& b) {
   return std::sqrt(dx * dx + dy * dy + dz * dz);
 }
 
-std::uint64_t largestCircuitsProduct(std::span<const std::string> coordinates,
-                                     std::uint64_t totalConnections);
+std::uint64_t largestCircuitsProduct(std::span<const std::string> coordinates);
 
 }  // namespace day8

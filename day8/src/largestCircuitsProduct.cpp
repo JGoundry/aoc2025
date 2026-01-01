@@ -2,11 +2,10 @@
 
 #include <algorithm>
 #include <cstdint>
-#include <functional>
+#include <vector>
 #include <initializer_list>
 #include <iostream>
 #include <iterator>
-#include <numeric>
 #include <ostream>
 #include <ranges>
 #include <set>
@@ -30,8 +29,8 @@ class PointCombination {
   }
 
   std::uint64_t distance() const { return distance_; }
-  Point a() const { return a_; }
-  Point b() const { return b_; }
+  const Point& a() const { return a_; }
+  const Point& b() const { return b_; }
 
   auto operator<=>(const PointCombination& rhs) const = default;
 
@@ -68,9 +67,9 @@ std::ostream& operator<<(std::ostream& os, const Point& p) {
   return os;
 }
 
-std::uint64_t largestCircuitsProduct(const std::span<const std::string> coordinates,
-                                     std::uint64_t totalConnections) {
-  if (coordinates.empty() || totalConnections == 0) return {};
+std::uint64_t largestCircuitsProduct(
+    const std::span<const std::string> coordinates) {
+  if (coordinates.empty()) return {};
 
   // Point parsing function
   auto strToPoint = [](const std::string& str) -> Point {
@@ -101,71 +100,62 @@ std::uint64_t largestCircuitsProduct(const std::span<const std::string> coordina
   const auto& points = coordinates | std::views::transform(strToPoint);
   const auto nPoints = points.size();
 
-  // Get all possible point combinations including their distance
+  // Create initial circuits one for each point
+  std::vector<Circuit> circuits;
+  circuits.reserve(nPoints);
+
+  // Populate circuits and get all possible point combinations with distance
   std::vector<PointCombination> allPointCombinations;
   allPointCombinations.reserve(nPoints * (nPoints - 1) / 2);
   for (auto i{0}; i < nPoints; ++i) {
+    auto&& iPoint = points[i];
+    circuits.emplace_back(Circuit{iPoint});
     for (auto j{i + 1}; j < nPoints; ++j) {
-      allPointCombinations.emplace_back(PointCombination(points[i], points[j]));
+      allPointCombinations.emplace_back(PointCombination(iPoint, points[j]));
     }
   }
 
-  // Sort the point combinations so that the n smallest distances are first
-  totalConnections = std::min(totalConnections, allPointCombinations.size());
-  std::ranges::partial_sort(
-      allPointCombinations,
-      std::next(allPointCombinations.begin(), totalConnections), {},
-      &PointCombination::distance);
+  // Sort the point combinations so that the smallest distances are first
+  std::ranges::sort(allPointCombinations, {}, &PointCombination::distance);
 
-  // Create circuits by connecting n points with the smallest distance
-  std::vector<Circuit> circuits;
-  for (const auto& pc :
-       allPointCombinations | std::views::take(totalConnections)) {
-    // Get circuits which points already belong to if there is any
+  for (const auto& pc : allPointCombinations) {
+    const Point& pointA = pc.a();
+    const Point& pointB = pc.b();
+
+    // Get circuits which points already belong to 
     std::vector<Circuit>::iterator aCircuit{circuits.end()};
     std::vector<Circuit>::iterator bCircuit{circuits.end()};
     for (auto it = circuits.begin(); it != circuits.end();
          std::advance(it, 1)) {
-      if (it->contains(pc.a())) {
+      if (it->contains(pointA)) {
         aCircuit = it;
       }
-      if (it->contains(pc.b())) {
+      if (it->contains(pointB)) {
         bCircuit = it;
       }
       if (aCircuit != circuits.end() && bCircuit != circuits.end()) break;
     }
 
-    // If neither is in circuit, create new circuit
-    if (aCircuit == circuits.end() && bCircuit == circuits.end()) {
-      circuits.emplace_back(Circuit{pc.a(), pc.b()});
-    }
     // If a is in circuit but b is not. Add b to aCircuit
-    else if (aCircuit != circuits.end() && bCircuit == circuits.end()) {
-      aCircuit->insert(pc.b());
+    if (aCircuit != circuits.end() && bCircuit == circuits.end()) {
+      aCircuit->insert(pointB);
     }
     // If b is in circuit but a is not. Add a to bCircuit
     else if (aCircuit == circuits.end() && bCircuit != circuits.end()) {
-      bCircuit->insert(pc.a());
+      bCircuit->insert(pointA);
     }
     // If both are in circuits, and circuits are different. Merge and delete one
     else if (aCircuit != bCircuit) {
       aCircuit->merge(*bCircuit);
       circuits.erase(bCircuit);
     }
+
+    // If this connection has made us form a single circuit, return the product
+    // of the x coordinates of the two points
+    if (circuits.size() == 1) return pointA.x * pointB.x;
   }
-  if (circuits.empty()) return {};
 
-  // Create our own end iterator as we only want the 3 largest circuits
-  const auto endIt =
-      std::next(circuits.begin(), std::min(3UL, circuits.size()));
-
-  // Sort so we get the largest 3 first by size
-  std::ranges::partial_sort(circuits, endIt, std::greater<>{}, &Circuit::size);
-
-  // Sum the 3 largest circuit sizes
-  return std::transform_reduce(circuits.begin(), endIt, std::uint64_t{1},
-                               std::multiplies<>{},
-                               [](const Circuit& c) { return c.size(); });
+  return {};
 }
 
 }  // namespace day8

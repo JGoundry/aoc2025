@@ -1,5 +1,4 @@
 
-#include <cstdint>
 #include <iostream>
 #include <print>
 
@@ -7,18 +6,8 @@
 #include "utils/fileUtils.hpp"
 
 int main(int argc, char* argv[]) {
-  if (argc != 3) {
-    std::println(std::cerr, "Usage: {} <input_file> <connections>", argv[0]);
-    return -1;
-  }
-
-  // Validate
-  const std::string_view connectionsStr = argv[2];
-  std::uint64_t connections{};
-  try {
-     connections = std::stoull(std::string(connectionsStr));
-  } catch (const std::exception& e) {
-    std::println(std::cerr, "Caught exception '{}' while trying to convert connections '{}' to number.", e.what(), argv[2]);
+  if (argc != 2) {
+    std::println(std::cerr, "Usage: {} <input_file>", argv[0]);
     return -1;
   }
 
@@ -37,7 +26,7 @@ int main(int argc, char* argv[]) {
     return -1;
   }
 
-  const auto ans = day8::largestCircuitsProduct(*coordinates, connections);
+  const auto ans = day8::largestCircuitsProduct(*coordinates);
 
   std::println("Largest circuits product: {}", ans);
 
