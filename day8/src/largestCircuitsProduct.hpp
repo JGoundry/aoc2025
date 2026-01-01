@@ -2,8 +2,8 @@
 
 #include <cmath>
 #include <cstdint>
+#include <span>
 #include <string>
-#include <vector>
 
 namespace day8 {
 
@@ -20,7 +20,7 @@ constexpr double euclideanDistance(const Point& a, const Point& b) {
   return std::sqrt(dx * dx + dy * dy + dz * dz);
 }
 
-std::uint64_t largestCircuitsProduct(
-    const std::vector<std::string>& coordinates);
+std::uint64_t largestCircuitsProduct(std::span<const std::string> coordinates,
+                                     std::uint64_t totalConnections);
 
 }  // namespace day8

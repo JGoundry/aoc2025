@@ -11,6 +11,7 @@ namespace {
 
 struct Day8TestParams {
   std::vector<std::string> coordinates;
+  std::uint64_t totalConnections;
   std::uint64_t expected;
 };
 
@@ -25,7 +26,8 @@ TEST(EuclideanDistance3D, Test) {
 
 TEST_P(Day8, LargestCircuitsProduct) {
   const auto& data = GetParam();
-  EXPECT_EQ(data.expected, largestCircuitsProduct(data.coordinates));
+  EXPECT_EQ(data.expected,
+            largestCircuitsProduct(data.coordinates, data.totalConnections));
 }
 
 INSTANTIATE_TEST_SUITE_P(
@@ -36,6 +38,7 @@ INSTANTIATE_TEST_SUITE_P(
          {"739,650,466"}, {"52,470,668"},  {"216,146,977"}, {"819,987,18"},
          {"117,168,530"}, {"805,96,715"},  {"346,949,466"}, {"970,615,88"},
          {"941,993,340"}, {"862,61,35"},   {"984,92,344"},  {"425,690,689"}},
+        10,
         40}));
 
 }  // namespace testing
