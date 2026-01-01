@@ -41,7 +41,7 @@ class PointCombination {
   }
 
  private:
-  std::uint64_t distance_;
+  double distance_;
   Point a_;
   Point b_;
 };
